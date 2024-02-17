@@ -9,11 +9,13 @@ export default function Characters() {
   const dispatch = useDispatch();
 
   const list = useSelector((state) => state.characters.list);
+
   useEffect(() => {
     !list.length &&
       getList();
   }, [])
 
+  // get list from api and store it in toolkit
   const getList = async () => {
     const resp = await fetch("https://rickandmortyapi.com/api/character");
     const data = await resp.json();
