@@ -13,9 +13,12 @@ const characterSlice = createSlice({
     getSingleCharacter: (state, action) => {
       let foundCharacter = state.list.find(character => parseInt(action.payload) === character.id);
       state.selectedCharacter = foundCharacter || {};
+    },
+    setSingleCharacter: (state, action) => {
+      state.selectedCharacter = action.payload;
     }
   }
 });
 
-export const { insert, getSingleCharacter } = characterSlice.actions;
+export const { insert, getSingleCharacter, setSingleCharacter } = characterSlice.actions;
 export default characterSlice.reducer;

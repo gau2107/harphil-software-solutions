@@ -3,6 +3,7 @@ import CharacterCard from "../components/CharacterCard";
 import { useDispatch, useSelector } from 'react-redux';
 import { insert } from "../store/CharacterSlice";
 import Header from "../components/Header";
+import Swal from "sweetalert2";
 
 export default function Characters() {
   const dispatch = useDispatch();
@@ -16,7 +17,18 @@ export default function Characters() {
   const getList = async () => {
     const resp = await fetch("https://rickandmortyapi.com/api/character");
     const data = await resp.json();
-    dispatch(insert(data.results));
+    if (data.error)
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        toast: true,
+        title: data.error,
+        showConfirmButton: false,
+        heightAuto: false,
+        timer: 2500
+      });
+    else
+      dispatch(insert(data.results));
   }
 
   return (

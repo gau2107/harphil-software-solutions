@@ -1,8 +1,9 @@
 import { useDispatch, useSelector } from "react-redux"
-import { getSingleCharacter, insert } from "../store/CharacterSlice";
+import { getSingleCharacter, setSingleCharacter } from "../store/CharacterSlice";
 import { Link, useParams } from "react-router-dom";
 import Header from "../components/Header";
 import { useEffect } from "react";
+import Swal from "sweetalert2";
 
 export default function CharacterDetail() {
 
@@ -16,15 +17,25 @@ export default function CharacterDetail() {
 
   useEffect(() => {
     if (!character || !character.id) {
-      getList();
+      getCharacter();
     }
-  }, [character]);
+  }, []);
 
-  const getList = async () => {
-    const resp = await fetch("https://rickandmortyapi.com/api/character");
+  const getCharacter = async () => {
+    const resp = await fetch(`https://rickandmortyapi.com/api/character/${id}`);
     const data = await resp.json();
-    dispatch(insert(data.results));
-    dispatch(getSingleCharacter(id));
+    if (data.error)
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        toast: true,
+        title: data.error,
+        showConfirmButton: false,
+        heightAuto: false,
+        timer: 2500
+      });
+    else
+      dispatch(setSingleCharacter(data));
   }
 
 
