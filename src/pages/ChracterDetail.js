@@ -1,12 +1,14 @@
 import { useDispatch, useSelector } from "react-redux"
 import { getSingleCharacter, setSingleCharacter } from "../store/CharacterSlice";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import { useEffect } from "react";
 import Swal from "sweetalert2";
+import BackToHomeButton from "../components/common/BackToHomeButton";
 
 export default function CharacterDetail() {
 
+  const navigate = useNavigate();
   const { selectedCharacter, isError } = useSelector((state) => state.characters);
 
   const { id } = useParams();
@@ -35,7 +37,9 @@ export default function CharacterDetail() {
         title: data.error,
         showConfirmButton: false,
         heightAuto: false,
-        timer: 2500
+        timer: 1500
+      }).then(() => {
+        navigate("/");
       });
     else
       dispatch(setSingleCharacter(data));
@@ -77,13 +81,7 @@ export default function CharacterDetail() {
               <span>{selectedCharacter.origin?.name}</span>
             </div>
           </div>
-          <div className="text-center">
-            <Link to="/" >
-              <button className="bg-black text-white uppercase py-2 px-4 rounded transition duration-300 ease-in-out hover:bg-gray-800">
-                Back to home
-              </button>
-            </Link>
-          </div>
+          <BackToHomeButton />
         </div>
       </div>
     </div>
